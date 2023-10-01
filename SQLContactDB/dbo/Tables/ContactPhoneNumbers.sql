@@ -2,5 +2,5 @@
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [ContactId] INT NOT NULL, 
-    [PhoneNumber] VARCHAR(20) NOT NULL
+    [PhoneNumber] INT NOT NULL
 )
