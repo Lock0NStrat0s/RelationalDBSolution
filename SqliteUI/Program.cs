@@ -1,12 +1,14 @@
-﻿using Microsoft.Extensions.Configuration;
-using DataAccessLibrary;
+﻿using DataAccessLibrary;
 using DataAccessLibrary.Models;
+using Microsoft.Extensions.Configuration;
+
+namespace SqliteUI;
 
 public class Program
 {
-    private static void Main(string[] args)
+    static void Main(string[] args)
     {
-        SqlCRUD sql = new SqlCRUD(GetConnectionString());
+        SqliteCRUD sql = new SqliteCRUD(GetConnectionString());
 
         //ReadAllContacts(sql);
 
@@ -14,32 +16,33 @@ public class Program
 
         //CreateNewContact(sql);
 
-        //UpdateContact(sql);
+        UpdateContact(sql);
+        ReadAllContacts(sql);
 
-        //RemovePhoneNumberFromContact(sql, 3, 5);
+        //RemovePhoneNumberFromContact(sql, 1,1);
 
-        Console.WriteLine("Done Processing SQL Server");
+        Console.WriteLine("\nDone Processing SQLite");
 
         Console.ReadLine();
     }
 
-    private static void RemovePhoneNumberFromContact(SqlCRUD sql, int contactId, int phoneNumberId)
+    private static void RemovePhoneNumberFromContact(SqliteCRUD sql, int contactId, int phoneNumberId)
     {
         sql.RemovePhoneNumberFromContact(contactId, phoneNumberId);
     }
 
-    private static void UpdateContact(SqlCRUD sql)
+    private static void UpdateContact(SqliteCRUD sql)
     {
         BasicContactModel contact = new BasicContactModel
         {
             Id = 1,
-            FirstName = "Tom",
-            LastName = "Corey"
+            FirstName = "Blob",
+            LastName = "Borey"
         };
         sql.UpdateContactName(contact);
     }
 
-    private static void CreateNewContact(SqlCRUD sql)
+    private static void CreateNewContact(SqliteCRUD sql)
     {
         FullContactModel user = new FullContactModel
         {
@@ -59,7 +62,7 @@ public class Program
         sql.CreateContact(user);
     }
 
-    private static void ReadAllContacts(SqlCRUD sql)
+    private static void ReadAllContacts(SqliteCRUD sql)
     {
         var rows = sql.GetAllContacts();
 
@@ -69,7 +72,7 @@ public class Program
         }
     }
 
-    private static void ReadContact(SqlCRUD sql, int contactId)
+    private static void ReadContact(SqliteCRUD sql, int contactId)
     {
         var contact = sql.GetFullContactById(contactId);
 
@@ -91,6 +94,4 @@ public class Program
 
         return output;
     }
-
-
 }

@@ -8,7 +8,7 @@ namespace DataAccessLibrary.Models;
 
 public class FullContactModel
 {
-    public BasicContactModel BasicInfo { get; set; }
+    public BasicContactModel BasicInfo { get; set; } = new();
     public List<EmailAddressModel> EmailAddresses { get; set; } = new();
     public List<PhoneNumberModel> PhoneNumbers { get; set; } = new();
 }
