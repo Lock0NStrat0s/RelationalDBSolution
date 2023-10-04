@@ -18,7 +18,7 @@ public class SqlCRUD
         _connectionString = connectionString;
     }
 
-    //READ
+    //READ All
     public List<BasicContactModel> GetAllContacts()
     {
         string sql = "select Id, FirstName, LastName from dbo.Contacts";
@@ -26,7 +26,7 @@ public class SqlCRUD
         return db.LoadData<BasicContactModel, dynamic>(sql, new { }, _connectionString);
     }
 
-    //WRITE
+    //READ
     public FullContactModel GetFullContactById(int id)
     {
         string sql = "select Id, FirstName, LastName from dbo.Contacts where Id = @Id";
@@ -82,6 +82,7 @@ public class SqlCRUD
                 sql = "insert into dbo.PhoneNumbers (PhoneNumber) values (@PhoneNumber);";
                 db.SaveData(sql, new { phoneNumber.PhoneNumber }, _connectionString);
 
+                sql = "select Id from dbo.PhoneNumbers where PhoneNumber = @PhoneNumber;";
                 phoneNumber.Id = db.LoadData<IdLookupModel, dynamic>(sql,
                                                                      new { phoneNumber.PhoneNumber },
                                                                      _connectionString).First().Id;
@@ -100,6 +101,7 @@ public class SqlCRUD
                 sql = "insert into dbo.EmailAddresses (EmailAddress) values (@EmailAddress);";
                 db.SaveData(sql, new { email.EmailAddress }, _connectionString);
 
+                sql = "select Id from dbo.EmailAddresses where EmailAddress = @EmailAddress;";
                 email.Id = db.LoadData<IdLookupModel, dynamic>(sql, new { email.EmailAddress }, _connectionString).First().Id;
             }
 
@@ -115,5 +117,34 @@ public class SqlCRUD
             // Then do the link table insert
         // Do the same for email
 
+    }
+
+    //UPDATE
+    public void UpdateContactName(BasicContactModel contact)
+    {
+        string sql = "update dbo.Contacts set FirstName = @FirstName, LastName = @LastName where Id = @Id";
+        db.SaveData(sql, contact, _connectionString);
+    }
+
+    //DELETE
+    public void RemovePhoneNumberFromContact(int contactId, int phoneNumberId)
+    {
+        // Find all the usages of the phone number id
+        // If 1, then delete link and phone number
+        // If > 1, then delete for contact
+
+        string sql = "select Id, ContactId, PhoneNumberId from dbo.ContactPhoneNumbers where PhoneNumberId = @PhoneNumberId;";
+        var links = db.LoadData<ContactPhoneNumberModel, dynamic>(sql,
+                                                                  new { phoneNumberId = phoneNumberId },
+                                                                  _connectionString);
+
+        sql = "delete from dbo.ContactPhoneNumbers where PhoneNumberId = @PhoneNumberId and ContactId = @ContactId";
+        db.SaveData(sql, new { phoneNumberId = phoneNumberId, contactId = contactId }, _connectionString);
+
+        if (links.Count == 1)
+        {
+            sql = "delete from dbo.PhoneNumbers where Id = @PhoneNumberId;";
+            db.SaveData(sql, new { phoneNumberId = phoneNumberId }, _connectionString);
+        }
     }
 }

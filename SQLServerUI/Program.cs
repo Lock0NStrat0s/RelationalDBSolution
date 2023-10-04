@@ -12,9 +12,31 @@ public class Program
 
         //ReadContact(sql, 1);
 
-        CreateNewContact(sql);
+        //CreateNewContact(sql);
+
+        //UpdateContact(sql);
+
+        //RemovePhoneNumberFromContact(sql, 3, 5);
+
+        Console.WriteLine("Done Processing");
 
         Console.ReadLine();
+    }
+
+    private static void RemovePhoneNumberFromContact(SqlCRUD sql, int contactId, int phoneNumberId)
+    {
+        sql.RemovePhoneNumberFromContact(contactId, phoneNumberId);
+    }
+
+    private static void UpdateContact(SqlCRUD sql)
+    {
+        BasicContactModel contact = new BasicContactModel
+        {
+            Id = 1,
+            FirstName = "Tom",
+            LastName = "Corey"
+        };
+        sql.UpdateContactName(contact);
     }
 
     private static void CreateNewContact(SqlCRUD sql)
