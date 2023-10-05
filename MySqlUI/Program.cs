@@ -19,9 +19,9 @@ public class Program
         //UpdateContact(sql);
         //ReadAllContacts(sql);
 
-        //RemovePhoneNumberFromContact(sql, 1,1);
+        //RemovePhoneNumberFromContact(sql, 1, 1);
 
-        Console.WriteLine("\nDone Processing SQLite");
+        Console.WriteLine("\nDone Processing MySQL");
 
         Console.ReadLine();
     }
